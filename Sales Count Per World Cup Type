@@ -1,0 +1,7 @@
+-- Results: NFTs for mens world cup type were sold 186% more times than the womens world cup type
+
+select m.world_cup_type, count(m.world_cup_type) as count_type -- Creating another column called count_type which determines the count of NFTs for the mens and womens world cup
+from algorand.nft.ez_nft_sales_fifa s
+join algorand.nft.ez_nft_metadata_fifa m on s.nft_asset_id = m.nft_asset_id -- Joining the metadata and the sales data on the asset id
+group by m.world_cup_type -- Categorizing by mens and womens world cup
+order by count_type desc -- Ordering by the count per type to find out which ranked higher
