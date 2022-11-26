@@ -1,0 +1,7 @@
+-- Results show that NFTs of the year 2018 were sold the most. 
+
+select m.year, count(m.year) as year_count -- Creating a new column that year count that depicts that number of NFTs sold for that particular year
+from algorand.nft.ez_nft_sales_fifa s
+join algorand.nft.ez_nft_metadata_fifa m on s.nft_asset_id = m.nft_asset_id -- Merging the metadata and the sales table on the asset id
+group by m.year -- Grouping the count of NFTs sold per year
+order by year_count desc -- Ordering the Year Count column in a descending manner
