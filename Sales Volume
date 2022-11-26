@@ -1,0 +1,12 @@
+-- Analyzing the FIFA NFTs
+
+with sales as(
+  select date_trunc(day, block_timestamp) as daystamp, count(daystamp) as sales_vol
+  from algorand.nft.ez_nft_sales_fifa
+  where daystamp between '{{start_date}}' and '{{end_date}}'
+  group by daystamp
+)
+
+select daystamp, sales_vol
+from sales
+group by daystamp, sales_vol
