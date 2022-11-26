@@ -1,0 +1,7 @@
+-- Results show that in the inital stages of the NFT Jo Hyeonwoo had the highest number of NFTs sold
+
+select date_trunc(day, block_timestamp) as daystamp, m.player, count(m.player) as player_count -- Truncating the block_timestamp vlaue to only display day. Then creating a column called player_count to find the number of NFTs sold with that player name in the NFT metdata
+from algorand.nft.ez_nft_sales_fifa s
+join algorand.nft.ez_nft_metadata_fifa m on s.nft_asset_id = m.nft_asset_id -- Joining on the NFT Asset ID column
+group by daystamp, m.player -- Grouping by daystamp and by the player name so as to get a count for the NFTs sold for a particular player on a paricular day. This will allow us to create a time series bar chart that will be able to display three values at once
+order by player_count desc
