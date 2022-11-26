@@ -1,0 +1,73 @@
+-- Creating 4 CTEs called highest_sold, least_sold, latest_sold and first_sold that will help the end user to play with the parameters in the dashboard and get multiple values with changing just one value
+
+with highest_sold as (
+  select
+    block_timestamp,
+    nft_asset_id, 
+    total_sales_amount_usd
+  from algorand.nft.ez_nft_sales_fifa
+  where total_sales_amount_usd is not null
+  group by 
+    block_timestamp, 
+    nft_asset_id, 
+    total_sales_amount_usd
+  order by total_sales_amount_usd desc
+  limit 10
+),
+least_sold as (
+  select 
+    block_timestamp,
+    nft_asset_id, 
+    total_sales_amount_usd
+  from algorand.nft.ez_nft_sales_fifa
+  where total_sales_amount_usd is not null
+  group by 
+    block_timestamp, 
+    nft_asset_id, 
+    total_sales_amount_usd
+  order by total_sales_amount_usd 
+  limit 10
+),
+first_sold as (
+  select
+    block_timestamp,
+    nft_asset_id, 
+    total_sales_amount_usd
+  from algorand.nft.ez_nft_sales_fifa
+  where total_sales_amount_usd is not null
+  group by 
+    nft_asset_id, 
+    total_sales_amount_usd, 
+    block_timestamp
+  order by block_timestamp 
+  limit 10
+),
+latest_sold as (
+  select 
+    block_timestamp,
+    nft_asset_id, 
+    total_sales_amount_usd
+  from algorand.nft.ez_nft_sales_fifa
+  where total_sales_amount_usd is not null
+  group by 
+    nft_asset_id, 
+    total_sales_amount_usd, 
+    block_timestamp
+  order by block_timestamp desc
+  limit 10
+)
+
+-- table_name is chosen as a parameter that will be selected by the user itself based on their inquiry interest. The parameters can be chosen from a dropdown. Some other useful columns from the metadata has been collected and displayed for the ease of the user
+select 
+  {{table_name}}.block_timestamp, 
+  {{table_name}}.nft_asset_id, 
+  {{table_name}}.total_sales_amount_usd, 
+  m.image, 
+  m.drop_name, 
+  m.rarity, 
+  m.event_type, 
+  m.country_1, 
+  m.country_2, 
+  m.player
+from {{table_name}}
+join algorand.nft.ez_nft_metadata_fifa m on {{table_name}}.nft_asset_id = m.nft_asset_id
