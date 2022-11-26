@@ -1,0 +1,8 @@
+-- The number of unique purchasers for a drop have been calculated and have been aliased as purchasers
+-- The total number of sales for each drop has been summed
+-- The data has been grouped according to the drop name 
+
+select m.drop_name, count(m.drop_name), count(distinct s.purchaser) as Purchasers, sum(s.total_sales_amount_usd) as Total_Sales
+from algorand.nft.ez_nft_metadata_fifa m
+join algorand.nft.ez_nft_sales_fifa s on m.nft_asset_id = s.nft_asset_id
+group by drop_name
