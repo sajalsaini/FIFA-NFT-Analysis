@@ -1,0 +1,12 @@
+with sales as (
+  select 
+    date_trunc(day, block_timestamp) as daystamp, 
+    sum(total_sales_amount_usd) as sales_usd, 
+    avg(total_sales_amount_usd) as avg_sales_usd
+  from algorand.nft.ez_nft_sales_fifa
+  where sale_type = '{{sale_type}}' and daystamp between '{{start_date}}' AND '{{end_date}}'
+  group by daystamp
+)
+
+select daystamp, sales_usd, avg_sales_usd
+from sales
