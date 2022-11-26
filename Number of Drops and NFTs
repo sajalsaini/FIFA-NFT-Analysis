@@ -1,0 +1,2 @@
+select count(distinct drop_name), count(distinct nft_asset_id)
+from algorand.nft.ez_nft_metadata_fifa
